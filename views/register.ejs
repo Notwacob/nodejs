@@ -64,7 +64,7 @@
                     <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
                         <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
                             Welcome to <br />
-                            <span style="color: hsl(218, 81%, 75%)">Desphixs</span>
+                            <span style="color: hsl(218, 81%, 75%)">Notwacobs</span>
                         </h1>
                         <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
                             Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -83,22 +83,14 @@
                                 <form action="/register" method="POST">
                                     <!-- 2 column grid layout with text inputs for the first and last names -->
                                     <div class="row">
-
-                                        <% if (messages.error) { %>
-                                            <div class="alert alert-danger">
-                                                <strong>
-                                                    <%= messages.error %>
-                                                </strong>
+                                        <h1 class="mb-3 h3">Register</h1>
+                                        <div class="col-md-12 mb-4">
+                                            <div class="form-outline">
+                                                <input type="text" name="name" id="form3Example2"
+                                                    class="form-control" />
+                                                <label class="form-label" for="form3Example2">Full Name</label>
                                             </div>
-                                            <% } %>
-                                                <h1 class="mb-3 h3">Register</h1>
-                                                <div class="col-md-12 mb-4">
-                                                    <div class="form-outline">
-                                                        <input type="text" name="name" id="form3Example2"
-                                                            class="form-control" />
-                                                        <label class="form-label" for="form3Example2">Full Name</label>
-                                                    </div>
-                                                </div>
+                                        </div>
                                     </div>
 
                                     <!-- Email input -->
