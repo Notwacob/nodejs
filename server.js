@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
+const MongoDBSession = require("connect-mongodb-session")(session);
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const initializePassport = require("./passport-config");
@@ -47,14 +47,11 @@ app.set('views', __dirname + '/views'); // make sure your EJS templates are in a
 
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
-// Create a new instance of MongoStore
-const store = new MongoStore({
-    url: process.env.MONGODB_URL,
-    collectionName: "sessions",
-    ttl: 86400, // Session TTL in seconds (optional)
+const store = new MongoDBSession({
+    uri: process.env.MONGODB_URL,
+    collection: "sessions",
 });
 
-// Use the MongoStore instance as the store option in express-session
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
