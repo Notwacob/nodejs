@@ -6,10 +6,13 @@ const app = express()
 
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt') // Importing bcrypt package
-const dbURI = process.env.MONGODB_URL;
+const passport = require('passport')
+const initializePassport = require("./passport-config")
+
+const MONGODB_URL = process.env.MONGODB_URL;
 
 mongoose.connect(
-    dbURI, 
+    MONGODB_URL, 
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
