@@ -47,15 +47,20 @@ app.set('views', __dirname + '/views'); // make sure your EJS templates are in a
 
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
+// Create a new instance of MongoStore
+const store = new MongoStore({
+    mongoUrl: process.env.MONGODB_URL,
+    collectionName: "sessions",
+    ttl: 86400, // Session TTL (optional)
+});
+
+// Use the MongoStore instance as the store option in express-session
 app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: new MongoStore({
-            url: process.env.MONGODB_URL,
-            collection: "sessions",
-        }),
+        store: store,
     })
 );
 app.use(passport.initialize())
