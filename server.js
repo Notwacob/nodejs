@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
+const MongoStore = require("express-session-mongo");
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const initializePassport = require("./passport-config");
@@ -46,11 +47,17 @@ app.set('views', __dirname + '/views'); // make sure your EJS templates are in a
 
 app.use(express.urlencoded({extended: false}))
 app.use(flash())
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false, // We wont resave the session variable if nothing is changed
-    saveUninitialized: false
-}))
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        store: new MongoStore({
+            url: process.env.MONGODB_URL,
+            collectionName: "sessions",
+        }),
+    })
+)
 app.use(passport.initialize()) 
 app.use(passport.session())
 app.use(methodOverride("_method"))
