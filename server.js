@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
-const MongoStore = require("express-session-mongo");
+const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const initializePassport = require("./passport-config");
@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-.then(() => console.log('MongoDB Connected...'))
+    .then(() => console.log('MongoDB Connected...'))
 
 async function getUserByEmail(email) {
     return await users.findOne({ email: email }).catch(err => {
@@ -38,14 +38,14 @@ async function getUserByEmail(email) {
 
 async function getUserById(id) {
     return await users.findOne({ id: id });
-  }
+}
 
 initializePassport(passport, getUserByEmail, getUserById, users);
 
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views'); // make sure your EJS templates are in a directory named "views" in the same directory as your server.js file
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(
     session({
@@ -54,11 +54,11 @@ app.use(
         saveUninitialized: false,
         store: new MongoStore({
             url: process.env.MONGODB_URL,
-            collectionName: "sessions",
+            collection: "sessions",
         }),
     })
-)
-app.use(passport.initialize()) 
+);
+app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride("_method"))
 
@@ -87,7 +87,7 @@ app.post("/register", checkNotAuthenticated, async (req, res) => {
 
         console.log(users); // Display newly registered in the console
         res.redirect("/login")
-        
+
     } catch (e) {
         console.log(e);
         res.redirect("/register")
@@ -96,7 +96,7 @@ app.post("/register", checkNotAuthenticated, async (req, res) => {
 
 // Routes
 app.get('/', checkAuthenticated, (req, res) => {
-    res.render("index.ejs", {name: req.user.name})
+    res.render("index.ejs", { name: req.user.name })
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -117,15 +117,15 @@ app.delete("/logout", (req, res) => {
     });
 });
 
-function checkAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return next()
     }
     res.redirect("/login")
 }
 
-function checkNotAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return res.redirect("/")
     }
     next()
