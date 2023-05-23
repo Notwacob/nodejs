@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
 const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
+const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const initializePassport = require("./passport-config");
@@ -49,9 +49,9 @@ app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 // Create a new instance of MongoStore
 const store = new MongoStore({
-    mongoUrl: process.env.MONGODB_URL,
+    url: process.env.MONGODB_URL,
     collectionName: "sessions",
-    ttl: 86400, // Session TTL (optional)
+    ttl: 86400, // Session TTL in seconds (optional)
 });
 
 // Use the MongoStore instance as the store option in express-session
